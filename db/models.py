@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from db.database import Base
 from datetime import datetime
@@ -21,7 +21,7 @@ class ConversationHistory(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     message = Column(String, nullable=False)
     response = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # ユーザーへのリレーション設定
     user = relationship("User", back_populates="conversations")
