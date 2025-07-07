@@ -10,7 +10,6 @@ from datetime import datetime
 load_dotenv()
 openai_api_key = os.getenv("API_KEY")
 openai_client = OpenAI(api_key=openai_api_key)
-
 router = APIRouter()
 
 def get_db():
@@ -23,14 +22,14 @@ def get_db():
 @router.post("/query")
 def chat_query(message: str, user_id: int, db: Session = Depends(get_db)):
     try:
-        # 🚩ユーザーごとのプロンプトを取得
+        # ユーザーごとのプロンプトを取得
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="ユーザーが見つかりません")
 
         # ユーザーごとのプロンプトをチャットAPIに渡す
         response = openai_client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4.1",
             messages=[
                 {"role": "system", "content": user.prompt},
                 {"role": "user", "content": message}
